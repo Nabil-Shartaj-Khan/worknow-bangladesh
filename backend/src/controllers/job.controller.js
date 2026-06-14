@@ -32,6 +32,32 @@ const createJob = async (req, res) => {
   }
 };
 
+const getAllJobs = async (req, res) => {
+  try {
+    const jobs = await prisma.job.findMany({
+      include: {
+        employer: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+          },
+        },
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+
+    return res.status(200).json(jobs);
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
 module.exports = {
   createJob,
+    getAllJobs,
 };

@@ -5,10 +5,11 @@ const roleMiddleware = require("../middleware/role.middleware");
 
 const {
   createJob,
+  getAllJobs,
 } = require("../controllers/job.controller");
 
 const router = express.Router();
-
+router.get("/", getAllJobs);
 router.post(
   "/",
   authMiddleware,
