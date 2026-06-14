@@ -151,9 +151,47 @@ const updateApplicationStatus = async (req, res) => {
     });
   }
 };
+const getMyApplications = async (req, res) => {
+  try {
+    const applications = await prisma.application.findMany({
+      where: {
+        userId: req.user.id,
+      },
+      include: {
+        job: {
+          select: {
+            id: true,
+            title: true,
+            description: true,
+            salary: true,
+            location: true,
+            jobType: true,
+            createdAt: true,
+            employer: {
+              select: {
+                id: true,
+                name: true,
+                email: true,
+              },
+            },
+          },
+        },
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
 
+    return res.status(200).json(applications);
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message,
+    });
+  }
+};
 module.exports = {
   applyToJob,
   getJobApplications,
-  updateApplicationStatus
+  updateApplicationStatus,
+  getMyApplications
 };

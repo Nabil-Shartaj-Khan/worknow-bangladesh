@@ -6,12 +6,21 @@ const roleMiddleware = require("../middleware/role.middleware");
 const {
   applyToJob,
   getJobApplications,
-  updateApplicationStatus
+  updateApplicationStatus,
+  getMyApplications
 } = require("../controllers/application.controller");
 
 const router = express.Router();
 
+
 router.post("/", authMiddleware, roleMiddleware("worker"), applyToJob);
+
+router.get(
+  "/my",
+  authMiddleware,
+  roleMiddleware("worker"),
+  getMyApplications
+);
 router.get(
   "/job/:jobId",
   authMiddleware,
@@ -25,4 +34,6 @@ router.patch(
   roleMiddleware("employer"),
   updateApplicationStatus
 );
+
+
 module.exports = router;
