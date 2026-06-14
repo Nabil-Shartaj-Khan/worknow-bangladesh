@@ -14,6 +14,25 @@ model User {
   password  String
   role      String   @default("worker")
 
+  jobs      Job[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Job {
+  id          Int      @id @default(autoincrement())
+
+  title       String
+  description String
+  salary      String
+  location    String
+  jobType     String
+
+  employerId  Int
+
+  employer    User @relation(fields: [employerId], references: [id])
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
